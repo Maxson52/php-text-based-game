@@ -28,7 +28,7 @@ if (isset($_POST['submitBtn'])) {
         // run query
         mysqli_query($conn, $insertQuery) or die("Query Error: " . mysqli_error($conn));
         // close connection
-        $msg = "Registration successful";
+        header("Location: login.php");
     }
 
     // close connection
@@ -38,30 +38,32 @@ if (isset($_POST['submitBtn'])) {
 <html>
 
 <head>
-    <title>Sign Up For Zork</title>
-    <link rel="stylesheet" href="https://unpkg.com/axist@latest/dist/axist.min.css" />
+    <title>Create Account | Zork: The Island Of The Lost</title>
+
+    <link rel=stylesheet href="https://s3-us-west-2.amazonaws.com/colors-css/2.2.0/colors.min.css"> <!-- import colors -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer" /> <!-- import font awesome -->
+
+    <!-- import auth.css -->
+    <link rel="stylesheet" href="css/auth.css">
 </head>
 
 <body>
     <div>
-        <h1>Sign Up For Zork</h1>
-        <p><?php echo $msg ?></p>
+        <h1>Create account</h1>
+        <p>Already have an account? <a href="login.php">Sign in</a></p>
+
+        <p class="red"><?php echo $msg ?></p>
 
         <form action="register.php" method="POST">
-            <label for="name">Name</label>
-            <input type="text" name="name" required>
+            <input type="text" name="name" placeholder="Name" required>
 
-            <label for="username">Username</label>
-            <input type="text" name="username" required>
+            <input type="text" name="username" placeholder="Username" required>
 
-            <label for="firstName">Password</label>
-            <input type="password" name="password" required>
+            <input type="password" name="password" placeholder="Password" required>
 
-            <input type="submit" value="Submit" name="submitBtn" style="margin-top: 15px;">
+            <button type="submit" name="submitBtn">Sign up <i class="fas fa-arrow-right"></i></button>
         </form>
     </div>
-
-    <p>Already have an account? <a href="login.php">Log In</a></p>
 
 </body>
 
