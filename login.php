@@ -47,18 +47,19 @@ if (isset($_POST['submitBtn'])) {
     <link rel=stylesheet href="https://s3-us-west-2.amazonaws.com/colors-css/2.2.0/colors.min.css"> <!-- import colors -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer" /> <!-- import font awesome -->
 
-    <!-- import auth.css -->
-    <link rel="stylesheet" href="css/auth.css">
+    <!-- import styles -->
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/form.css">
 </head>
 
 <body>
-    <div>
+    <div class="content">
         <h1>Sign in to continue</h1>
         <p>Don't have an account? <a href="register.php">Register</a></p>
 
         <p class="red"><?php echo $msg ?></p>
 
-        <form action="login.php" method="POST">
+        <form class="column" action="login.php" method="POST">
             <input type="text" name="username" placeholder="Username" required>
 
             <input type="password" name="password" placeholder="Password" required>

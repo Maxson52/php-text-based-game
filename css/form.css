@@ -1,0 +1,72 @@
+/* Form styles such as inputs and buttons */
+
+form.column {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2rem;
+}
+
+form.row {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  margin-top: 2rem;
+}
+
+input,
+button[type="submit"] {
+  border-radius: 0.75rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  border: 1px solid white;
+}
+
+form.row > input {
+  width: 25vw;
+}
+
+input:focus {
+  outline: none;
+  border: 1px solid var(--gray);
+}
+
+button[type="submit"] {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  justify-content: center;
+  align-items: center;
+
+  background-color: var(--blue);
+  color: white;
+  font-size: 1.2rem;
+  border: none;
+  padding: 1rem;
+  cursor: pointer;
+
+  transition: background-color 0.1s ease-in-out;
+}
+
+form.column > button[type="submit"] {
+  width: 35vw;
+}
+
+button[type="submit"]:hover {
+  background-color: var(--blue-dark);
+}
+
+a {
+  color: var(--blue);
+  text-decoration: underline;
+  text-underline-position: under;
+
+  transition: color 0.1s ease-in-out;
+}
+
+a:hover {
+  color: var(--blue-dark);
+}
+
+input:placeholder-shown {
+  font-style: italic;
+}

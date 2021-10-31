@@ -1,0 +1,71 @@
+/* Global styles such as body and text */
+
+@import url("http://fonts.cdnfonts.com/css/geomanist");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap");
+
+:root {
+  --blue: #4797ff;
+  --blue-dark: hsl(214, 100%, 56%);
+  --gray: #dfdfdf;
+  --gray-dark: #cfcfcf;
+  --gray-light: #f1f1f1;
+}
+
+body {
+  background: linear-gradient(
+    to top left,
+    #2193b0,
+    #6dd5ed,
+    #1488cc,
+    #20bdff,
+    #0052d4
+  );
+
+  height: 100vh;
+  margin: 0;
+  background-size: 500% 500%;
+
+  animation: gradient 30s ease infinite;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+h1 {
+  font-family: "Inter", sans-serif;
+  font-size: 2.5rem;
+
+  margin: 0;
+}
+
+*:not(h1) {
+  font-family: "geomanist", sans-serif;
+
+  letter-spacing: 0.08ch;
+}
+
+.content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  background-color: white;
+
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+
+  border-radius: 1rem;
+
+  padding: 6rem 6rem;
+
+  text-align: center;
+}

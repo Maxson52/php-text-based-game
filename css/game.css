@@ -1,0 +1,37 @@
+.game {
+  height: 35vh;
+  /* border: 1px solid var(--gray); */
+  margin: 1rem 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+
+  overflow-y: scroll;
+}
+
+/* custom scroll bar for .game */
+/* width */
+.game::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+/* Track */
+.game::-webkit-scrollbar-track {
+  background: var(--gray-light);
+}
+
+/* Handle */
+.game::-webkit-scrollbar-thumb {
+  background: var(--gray);
+  border-radius: 2rem;
+}
+
+/* Handle on hover */
+.game::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-dark);
+}
+
+span {
+  line-height: 1.5rem;
+}
