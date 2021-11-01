@@ -1,6 +1,10 @@
 <?php
 session_start();
 if (isset($_SESSION['user'])) {
+
+    if (isset($_POST['submitBtn'])) {
+        echo $_POST['command'];
+    }
 ?>
     <!DOCTYPE html>
     <html lang="en">
@@ -28,17 +32,18 @@ if (isset($_SESSION['user'])) {
 
             <div class="game">
                 <?php
-                for ($i = 0; $i < 20; $i++) {
+                for ($i = 0; $i < 2; $i++) {
                     echo "<span>Hi my fav number is " . rand(1, 100) . "</span>";
                 }
                 ?>
             </div>
 
-            <form class="row" action="index.php" method="POST">
-                <input type="text" name="command" placeholder="Enter a command">
+            <form id="commandForm" class="row" action="index.php" method="POST">
+                <input type="text" name="command" placeholder="Enter a command" autocomplete="off">
                 <button type="submit" name="submitBtn"><i class="fas fa-arrow-right"></i></button>
             </form>
         </div>
+
     </body>
 
     </html>
