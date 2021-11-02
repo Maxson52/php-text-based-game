@@ -1,21 +1,21 @@
 <?php
 // create assosiative array of possible commands and their descriptions, errors, and outcomes
 $commands = [
-    'n' => ['description' => 'You walk north.', 'error' => 'You can\'t go that way.', 'outcome' => move('n')],
-    'e' => ['description' => 'You walk east.', 'error' => 'You can\'t go that way.', 'outcome' => move('e')],
-    's' => ['description' => 'You walk south.', 'error' => 'You can\'t go that way.', 'outcome' => move('s')],
-    'w' => ['description' => 'You walk west.', 'error' => 'You can\'t go that way.', 'outcome' => move('w')],
-    'north' => ['description' => 'You walk north.', 'error' => 'You can\'t go that way.', 'outcome' => move('n')],
-    'east' => ['description' => 'You walk east.', 'error' => 'You can\'t go that way.', 'outcome' => move('e')],
-    'south' => ['description' => 'You walk south.', 'error' => 'You can\'t go that way.', 'outcome' => move('s')],
-    'west' => ['description' => 'You walk west.', 'error' => 'You can\'t go that way.', 'outcome' => move('w')],
-    'up' => ['description' => 'You climb up.', 'error' => 'You can\'t go that way.'],
-    'u' => ['description' => 'You climb up.', 'error' => 'You can\'t go that way.'],
-    'down' => ['description' => 'You go down.', 'error' => 'You can\'t go that way.'],
-    'd' => ['description' => 'You go down.', 'error' => 'You can\'t go that way.'],
-    'take' => ['description' => 'You take the item.', 'error' => 'You can\'t take that.'],
-    'grab' => ['description' => 'You take the item.', 'error' => 'You can\'t take that.'],
-    'drop' => ['description' => 'You drop the item.', 'error' => 'You can\'t drop that.'],
+    'n' => ['description' => 'You walk north.', 'error' => 'You can\'t go that way.', 'type' => 'cardinal'],
+    'e' => ['description' => 'You walk east.', 'error' => 'You can\'t go that way.', 'type' => 'cardinal'],
+    's' => ['description' => 'You walk south.', 'error' => 'You can\'t go that way.', 'type' => 'cardinal'],
+    'w' => ['description' => 'You walk west.', 'error' => 'You can\'t go that way.', 'type' => 'cardinal'],
+    'north' => ['description' => 'You walk north.', 'error' => 'You can\'t go that way.',   'type' => 'cardinal'],
+    'east' => ['description' => 'You walk east.', 'error' => 'You can\'t go that way.', 'type' => 'cardinal'],
+    'south' => ['description' => 'You walk south.', 'error' => 'You can\'t go that way.', 'type' => 'cardinal'],
+    'west' => ['description' => 'You walk west.', 'error' => 'You can\'t go that way.', 'type' => 'cardinal'],
+    'up' => ['description' => 'You climb up.', 'error' => 'You can\'t go that way.', 'type' => 'vertical'],
+    'u' => ['description' => 'You climb up.', 'error' => 'You can\'t go that way.', 'type' => 'vertical'],
+    'down' => ['description' => 'You go down.', 'error' => 'You can\'t go that way.', 'type' => 'vertical'],
+    'd' => ['description' => 'You go down.', 'error' => 'You can\'t go that way.', 'type' => 'vertical'],
+    'take' => ['description' => 'You take the item.', 'error' => 'You can\'t take that.', 'type' => 'take'],
+    'grab' => ['description' => 'You take the item.', 'error' => 'You can\'t take that.', 'type' => 'take'],
+    'drop' => ['description' => 'You drop the item.', 'error' => 'You can\'t drop that.', 'type' => 'drop'],
     'look' => ['description' => 'You look around.', 'error' => ''],
     'see' => ['description' => 'You look around.', 'error' => ''],
     'inventory' => ['description' => 'You access your inventory.', 'error' => ''],
@@ -40,7 +40,7 @@ $scenes[1] = array(
 $scenes[2] = array(
     'location' => 'The Boat',
     'commands' => array('w', 'west', 's', 'south', 'e', 'east', 'u', 'up', 'd', 'down'), // climb on to boat
-    'story' => array('The boat is within arms reach, a ladder is there to climb.'),
+    'story' => array('The waves are more aggressive out here. You can\'t stay for long.', 'The boat is within arms reach, a ladder is there to climb.'),
     'story-up' => array('You climb up the ladder.', 'The boat is empty, not a soul around.', 'Ocean surrounds you, but you can make out the shoreline from which you came.')
 );
 $scenes[3] = array(
@@ -66,7 +66,7 @@ $scenes[6] = array(
 );
 $scenes[7] = array(
     'location' => 'The Ocean',
-    'commands' => array('w', 'west', 's', 'south', 'e', 'east', 'u', 'up', 'd', 'down'), // grab the key (should it require a take/grab or only a down/d?)
+    'commands' => array('w', 'west', 's', 'south', 'u', 'up', 'd', 'down'), // grab the key (should it require a take/grab or only a down/d?)
     'story' => array('As you drift further from the boat, a glimmer of light catches your eye.', 'You see a small key on the ground, at least 15ft below the surface.'),
     'story-down' => array('You dive down, as much air in your lungs as you can hold.', 'Your vision gets worse and your ears start to ring.', 'You snag the key and jolt up to the surface.')
 );
@@ -77,7 +77,7 @@ $scenes[8] = array(
 );
 $scenes[9] = array(
     'location' => 'The Beach (Start)',
-    'commands' => array('n', 'e', 'north', 'east'),
+    'commands' => array('n', 'e', 's', 'north', 'east', 'south'),
     'story' => array('After a horrible accident, you find yourself alone on an island.', 'Survival relies on you finding food, and a way out.')
 );
 $scenes[10] = array(
@@ -102,7 +102,7 @@ $scenes[13] = array(
 );
 $scenes[14] = array(
     'location' => 'The Tunnel',
-    'commands' => array('e', 'w', 'east', 'west'), 
+    'commands' => array('e', 'w', 'east', 'west'),
     'story' => array('There is a long, dark tunnel ahead.', 'Nothing around you had seemed useful. This may be your last chance.')
 );
 $scenes[15] = array(

@@ -1,13 +1,7 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "zork";
-
 $msg = "";
 
-// Create connection
-$conn = mysqli_connect($servername, $username, $password, $dbname) or die("Connection failed: " . mysqli_connect_error());
+require('scripts/conn.php');
 
 // check if _POST is set then set up sql connection and query
 if (isset($_POST['submitBtn'])) {

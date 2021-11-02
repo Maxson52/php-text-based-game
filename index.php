@@ -1,14 +1,54 @@
 <?php
 session_start();
 if (isset($_SESSION['user'])) {
-    // all logic in here
+    // default vars
+    $yourCommand = "";
+    $doesCommandExist['error'] = "";
+    $isCommandValid[0] = '';
+    $isCommandValid[1] = '';
+
+    // game vars
+    if (!isset($_SESSION['game_save'])) {
+        $_SESSION['game_save'] = [];
+        $_SESSION['game_save']['location'] = 9;
+        $_SESSION['game_save']['inventory'] = [];
+        $_SESSION['game_save']['vertLocation'] = 0;
+    }
+
     require('scripts/commands.php');
 
+    // all logic in here
     if (isset($_POST['submitBtn'])) {
-        onCommand($_POST['command']);
+        $yourCommand = $_POST['command'];
+        $doesCommandExist = doesCommandExist($yourCommand);
 
+        // check if user typed in nonsense
+        if (!isset($doesCommandExist['error'])) {
+            $isCommandValid = isCommandValid($doesCommandExist);
+        } else {
+            $isCommandValid['error'] = $doesCommandExist['error'];
+        }
 
-        
+        // check if command is not an error
+        if (isset($isCommandValid[1])) {
+            // check command type and do something
+            if ($isCommandValid[1] == 'cardinal') {
+                moveAmount($isCommandValid[0]);
+
+                // allow user to move two spaces however i don't think this is needed
+                if (in_array("2", $doesCommandExist[2]) or in_array("two", $doesCommandExist[2])) {
+                    echo "2";
+                    $isCommandValid = isCommandValid($doesCommandExist);
+
+                    if (isset($isCommandValid[1])) {
+                        moveAmount($isCommandValid[0]);
+                    }
+                }
+            } else if ($isCommandValid[1] == 'vertical') {
+                moveVertical($isCommandValid[0]);
+            }
+        }
+
         // empty $_POST array
         $_POST = [];
     }
@@ -39,9 +79,20 @@ if (isset($_SESSION['user'])) {
 
             <div class="game">
                 <?php
-                for ($i = 0; $i < 2; $i++) {
-                    echo "<span>Hi my fav number is " . rand(1, 100) . "</span>";
+                // echo the location of the current location
+                echo "<h2 class='location'>" . getLocation()['location'] . "</h2>";
+
+                // echo the coordinates of the user
+                echo "<h3 class='coordinates'>" . getXY() . "</h3>";
+
+                // foreach index of the current location echo the description
+                foreach (getLocation()['story'] as $story) {
+                    echo "<p>" . $story . "</p>";
                 }
+
+                // echo the users command
+                echo $yourCommand ? "> <i>" . $yourCommand . "</i><br>" : "";
+                echo isset($isCommandValid['error']) ? $isCommandValid['error'] . "<br>" : "";
                 ?>
             </div>
 
