@@ -1,9 +1,16 @@
 <?php
 session_start();
 if (isset($_SESSION['user'])) {
+    // all logic in here
+    require('scripts/commands.php');
 
     if (isset($_POST['submitBtn'])) {
-        echo $_POST['command'];
+        onCommand($_POST['command']);
+
+
+        
+        // empty $_POST array
+        $_POST = [];
     }
 ?>
     <!DOCTYPE html>
@@ -39,7 +46,7 @@ if (isset($_SESSION['user'])) {
             </div>
 
             <form id="commandForm" class="row" action="index.php" method="POST">
-                <input type="text" name="command" placeholder="Enter a command" autocomplete="off">
+                <input type="text" name="command" placeholder="Enter a command" autocomplete="off" autofocus>
                 <button type="submit" name="submitBtn"><i class="fas fa-arrow-right"></i></button>
             </form>
         </div>
