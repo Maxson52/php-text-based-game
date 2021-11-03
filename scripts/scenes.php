@@ -46,7 +46,8 @@ $scenes[2] = array(
 $scenes[3] = array(
     'location' => 'The Boat',
     'commands' => array('w', 'west'), // grab the food
-    'story' => array('Water on all sides, the boat isn\'t a good place to stay.', 'Towards the bow of the ship, you see some delicious beef jerky.')
+    'story' => array('Water on all sides, the boat isn\'t a good place to stay.', 'Towards the bow of the ship, you see some delicious beef jerky.'),
+    'story-up' => array('Water on all sides, the boat isn\'t a good place to stay.', 'Towards the bow of the ship, you see some delicious beef jerky.')
 );
 $scenes[4] = array(
     'location' => 'The Forest',
@@ -67,8 +68,8 @@ $scenes[6] = array(
 $scenes[7] = array(
     'location' => 'The Ocean',
     'commands' => array('w', 'west', 's', 'south', 'u', 'up', 'd', 'down'), // grab the key (should it require a take/grab or only a down/d?)
-    'story' => array('As you drift further from the boat, a glimmer of light catches your eye.', 'You see a small key on the ground, at least 15ft below the surface.'),
-    'story-down' => array('You dive down, as much air in your lungs as you can hold.', 'Your vision gets worse and your ears start to ring.', 'You snag the key and jolt up to the surface.')
+    'story' => array('As you drift further from the boat, a glimmer of light catches your eye.', 'You see a small key on the ground, at least 15 feet below the surface.'),
+    'story-down' => array('You dive down, as much air in your lungs as you can hold.', 'Your vision gets worse and your ears start to ring.', 'You see the glimmer of the key and jolt up towards it.')
 );
 $scenes[8] = array(
     'location' => 'The Tent',
