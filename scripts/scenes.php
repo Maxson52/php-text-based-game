@@ -11,17 +11,18 @@ $commands = [
     'west' => ['description' => 'You walk west.', 'error' => 'You can\'t go that way.', 'type' => 'cardinal'],
     'up' => ['description' => 'You climb up.', 'error' => 'You can\'t go that way.', 'type' => 'vertical'],
     'u' => ['description' => 'You climb up.', 'error' => 'You can\'t go that way.', 'type' => 'vertical'],
+    'climb' => ['description' => 'You climb up.', 'error' => 'You can\'t go that way.', 'type' => 'vertical'],
     'down' => ['description' => 'You go down.', 'error' => 'You can\'t go that way.', 'type' => 'vertical'],
     'd' => ['description' => 'You go down.', 'error' => 'You can\'t go that way.', 'type' => 'vertical'],
     'take' => ['description' => 'You take the item.', 'error' => 'You can\'t take that.', 'type' => 'take'],
     'grab' => ['description' => 'You take the item.', 'error' => 'You can\'t take that.', 'type' => 'take'],
     'drop' => ['description' => 'You drop the item.', 'error' => 'You can\'t drop that.', 'type' => 'drop'],
-    'look' => ['description' => 'You look around.', 'error' => ''],
+    'use' => ['description' => 'You use an item in your inventory.', 'error' => 'You can\'t use that here.', 'type' => 'use'],
     'see' => ['description' => 'You look around.', 'error' => ''],
-    'inventory' => ['description' => 'You access your inventory.', 'error' => ''],
-    'i' => ['description' => 'You access your inventory.', 'error' => ''],
-    'help' => ['description' => 'How\'d you get here?', 'error' => ''],
-    'h' => ['description' => 'How\'d you get here?', 'error' => ''],
+    'inventory' => ['description' => 'You access your inventory.', 'error' => '', 'type' => 'inventory'],
+    'i' => ['description' => 'You access your inventory.', 'error' => '', 'type' => 'inventory'],
+    'help' => ['description' => 'How\'d you get here?', 'error' => '', 'type' => 'help'],
+    'h' => ['description' => 'How\'d you get here?', 'error' => '', 'type' => 'help'],
 ];
 
 // create a scenes array with 16 scenes
@@ -30,7 +31,7 @@ $scenes = array();
 $scenes[0] = array(
     'location' => 'The Beach',
     'commands' => array('e', 's', 'east', 'south',),
-    'story' => array('Sand between your toes, the beach is a delightful place.', 'Around, you see a forest and a ocean with waves crashing.')
+    'story' => array('Sand between your toes, the beach is a delightful place.', 'Around, you see a forest and a ocean with waves crashing.', 'It seems like a sandcastle was once mad here.', 'Beside it, there lies a shovel, half buried.')
 );
 $scenes[1] = array(
     'location' => 'The Ocean',
@@ -46,7 +47,8 @@ $scenes[2] = array(
 $scenes[3] = array(
     'location' => 'The Boat',
     'commands' => array('w', 'west'), // grab the food
-    'story' => array('Water on all sides, the boat isn\'t a good place to stay.', 'Towards the bow of the ship, you see some delicious beef jerky.')
+    'story' => array('The boat is right beside you.', 'But the ladder to get up is too far to climb from here.'),
+    'story-up' => array('Water on all sides, the boat isn\'t a good place to stay.', 'Towards the bow of the ship, you see some delicious beef jerky.')
 );
 $scenes[4] = array(
     'location' => 'The Forest',
@@ -67,8 +69,8 @@ $scenes[6] = array(
 $scenes[7] = array(
     'location' => 'The Ocean',
     'commands' => array('w', 'west', 's', 'south', 'u', 'up', 'd', 'down'), // grab the key (should it require a take/grab or only a down/d?)
-    'story' => array('As you drift further from the boat, a glimmer of light catches your eye.', 'You see a small key on the ground, at least 15ft below the surface.'),
-    'story-down' => array('You dive down, as much air in your lungs as you can hold.', 'Your vision gets worse and your ears start to ring.', 'You snag the key and jolt up to the surface.')
+    'story' => array('As you drift further from the boat, a glimmer of light catches your eye.', 'You see a small key on the ground, at least 15 feet below the surface.'),
+    'story-down' => array('You dive down, as much air in your lungs as you can hold.', 'Your vision gets worse and your ears start to ring.', 'You see the glimmer of the key and jolt towards it.')
 );
 $scenes[8] = array(
     'location' => 'The Tent',
@@ -96,22 +98,22 @@ $scenes[12] = array(
     'story' => array('A muddy mess.', 'You see but a hilly valley to the east, and to the north is more forest.')
 ); // ended here
 $scenes[13] = array(
-    'location' => 'Craggy Crove',
+    'location' => $_SESSION['game_save']['isHilly'] ? 'Craggy Crove' : '<strike>Craggy</strike> Crove',
     'commands' => array('n', 'e', 'w', 'north', 'east', 'west'), // use shovel to dig rocks
     'story' => array('A craggy crove lies upon you.', 'It seems rocks and mounds of dirt block the path.')
 );
 $scenes[14] = array(
     'location' => 'The Tunnel',
     'commands' => array('e', 'w', 'east', 'west'),
-    'story' => array('There is a long, dark tunnel ahead.', 'Nothing around you had seemed useful. This may be your last chance.')
+    'story' => array('A door with a small window presents itself right infront of you.', 'Through the window, you see a long, dark tunnel ahead.', 'Nothing around you has seemed useful. This may be your last chance.')
 );
 $scenes[15] = array(
     'location' => 'The Safe House',
     'commands' => array('w', 'west'), // enter pin code to win
-    'story' => array('It\'s almost as if you\'ve entered an abandonded safe house.', 'On the wall you notice a keypad.')
+    'story' => array('It\'s almost as if you\'ve entered an abandonded safe house.', 'On the wall you notice a keypad.', '<span id="pin">Enter pin: </span>')
 );
 $scenes[16] = array(
     'location' => 'The End',
     'commands' => array(), // win
-    'story' => array('The walls start screeching. They lower into the floor to reveal a fridge full of fresh food, a pantry with food to last a lifetime, and a phone to call for help.', 'You have found a way out...', 'The End')
+    'story' => array('The walls start screeching. They lower into the floor to reveal a fridge full of fresh food, a pantry with food to last a lifetime, and a phone to call for help.', 'You have found a way out...', '<b>The End</b>')
 );

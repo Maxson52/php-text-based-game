@@ -38,3 +38,10 @@ span {
   width: fit-content;
   background-color: var(--gray);
 }
+
+#pin {
+  /* style like a codeblock */
+  background-color: var(--gray-light);
+  font-weight: bold;
+  font-style: italic;
+}
