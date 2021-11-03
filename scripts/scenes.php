@@ -25,8 +25,6 @@ $commands = [
     'h' => ['description' => 'How\'d you get here?', 'error' => '', 'type' => 'help'],
 ];
 
-$pin = 0712;
-
 // create a scenes array with 16 scenes
 // each scene has a location, array of commands, and array of storylines
 $scenes = array();
@@ -117,5 +115,5 @@ $scenes[15] = array(
 $scenes[16] = array(
     'location' => 'The End',
     'commands' => array(), // win
-    'story' => array('The walls start screeching. They lower into the floor to reveal a fridge full of fresh food, a pantry with food to last a lifetime, and a phone to call for help.', 'You have found a way out...', 'The End')
+    'story' => array('The walls start screeching. They lower into the floor to reveal a fridge full of fresh food, a pantry with food to last a lifetime, and a phone to call for help.', 'You have found a way out...', '<b>The End</b>')
 );

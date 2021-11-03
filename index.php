@@ -76,6 +76,10 @@ if (isset($_SESSION['user'])) {
             else if ($isCommandValid[1] == 'help') {
                 $commandErrorMsg = showHelp();
             }
+            // enter pin
+            else if ($isCommandValid[1] == 'pin') {
+                $commandErrorMsg = enterPin($doesCommandExist[2]);
+            }
         }
         // if the command is a valid command, just not in this spot, tell user
         else {

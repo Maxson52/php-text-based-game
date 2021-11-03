@@ -6,20 +6,24 @@ require('scenes.php');
 // does the command exist?
 function doesCommandExist($command)
 {
-    global $commands, $pin;
+    global $commands;
 
     $command = explode(" ", trim(strtolower($command)));
 
     // check if command is valid where command is an array of all the words, value is each word
     foreach ($command as $key => $value) {
+        echo "Does: " . $value == "0712";
+        echo $_SESSION['game_save']['location'];
+
         if (array_key_exists($value, $commands)) {
             return [$value, $commands[$value], $command];
-
-            // if command is not valid, return an error
-        } else if ($_SESSION['game_save']['location'] == 15 && $value == $pin) {
-            moveAmount('w');
-            return [$value, ""];
-        } else if ($key == count($command) - 1) {
+        }
+        // if on the final tile, you are entering a pin
+        else if ($_SESSION['game_save']['location'] == 15 && $value != "w" && $value != "west") {
+            return [$value, ['type' => 'pin'], $command];
+        }
+        // if command is not valid, return an error
+        else if ($key == count($command) - 1) {
             return ['error' => "I don't know what you mean!"];
         }
     }
@@ -39,6 +43,8 @@ function isCommandValid($command)
     } else if ($command[1]['type'] == 'help') {
         return [$command[0], $command[1]['type']];
     } else if ($command[1]['type'] == 'use') {
+        return [$command[0], $command[1]['type']];
+    } else if ($command[1]['type'] == 'pin') {
         return [$command[0], $command[1]['type']];
     }
 
@@ -240,7 +246,9 @@ function useItem($command)
                     } else {
                         return "The door is already unlocked!";
                     }
-                } else if ($itemName == 'shovel' && $_SESSION['game_save']['location'] == 13) {
+                }
+                // if the item is a shovel
+                else if ($itemName == 'shovel' && $_SESSION['game_save']['location'] == 13) {
                     // if the location is hilly
                     if ($_SESSION['game_save']['isHilly']) {
                         $_SESSION['game_save']['isHilly'] = false;
@@ -248,6 +256,10 @@ function useItem($command)
                     } else {
                         return "You already dug here!";
                     }
+                }
+                // if the item is a volleyball
+                else if ($itemName == 'volleyball') {
+                    return 'WILSON - OFFICIAL GAME BALL - PRODUCT NO: 0712';
                 } else {
                     return "You can't use the " . $itemName . "!";
                 }
@@ -256,4 +268,20 @@ function useItem($command)
     }
 
     return "You don't have the " . $item . "!";
+}
+
+// enter pin
+function enterPin($command)
+{
+    foreach ($command as $pin) {
+        // loop through all the items to pick up
+        if ($pin == '0712') {
+            setLocation(1);
+            return 'The pin code you entered is correct';
+        } else {
+            return 'The pin code you entered is incorrect.';
+        }
+    }
+
+    return 'There was a problem!';
 }
