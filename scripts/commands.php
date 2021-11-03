@@ -6,7 +6,7 @@ require('scenes.php');
 // does the command exist?
 function doesCommandExist($command)
 {
-    global $commands;
+    global $commands, $pin;
 
     $command = explode(" ", trim(strtolower($command)));
 
@@ -16,6 +16,9 @@ function doesCommandExist($command)
             return [$value, $commands[$value], $command];
 
             // if command is not valid, return an error
+        } else if ($_SESSION['game_save']['location'] == 15 && $value == $pin) {
+            moveAmount('w');
+            return [$value, ""];
         } else if ($key == count($command) - 1) {
             return ['error' => "I don't know what you mean!"];
         }
@@ -26,11 +29,20 @@ function isCommandValid($command)
 {
     global $scenes;
 
+    // check for oddball commands
     if ($command[1]['type'] == 'take') {
+        return [$command[0], $command[1]['type']];
+    } else if ($command[1]['type'] == 'drop') {
+        return [$command[0], $command[1]['type']];
+    } else if ($command[1]['type'] == 'inventory') {
+        return [$command[0], $command[1]['type']];
+    } else if ($command[1]['type'] == 'help') {
+        return [$command[0], $command[1]['type']];
+    } else if ($command[1]['type'] == 'use') {
         return [$command[0], $command[1]['type']];
     }
 
-    // check if command is valid
+    // check if (movement) command is valid
     if (in_array($command[0], $scenes[$_SESSION['game_save']['location']]['commands'])) {
         return [$command[0], $command[1]['type']];
     } else {
@@ -79,6 +91,13 @@ function getXYZ()
 // motion function
 function moveAmount($direction)
 {
+    // make sure user is on a valid location
+    // the first part of the condition is the spots you can move to if you're up or down
+    if ($_SESSION['game_save']['location'] != 2 && $_SESSION['game_save']['location'] != 3 && ($_SESSION['game_save']['vertLocation'] == -1 || $_SESSION['game_save']['vertLocation'] == 1)) return "You can't go that way, you aren't on level ground!";
+
+    if ($_SESSION['game_save']['location'] == 13 && $_SESSION['game_save']['isHilly']) return "The landscape is too hilly to continue this way!";
+    if ($_SESSION['game_save']['location'] == 14 && $_SESSION['game_save']['doorLocked']) return "The door is locked!";
+
     if ($direction == 'n' or $direction == 'north') {
         setLocation(-4);
     } elseif ($direction == 's' or $direction == 'south') {
@@ -127,12 +146,114 @@ function moveVertical($direction)
 }
 
 // take or grab items
-function takeItem()
+function takeItem($command)
 {
     // check if there is an item on this space using get XYZ
-    if (array_search(getXYZ(), array_column($_SESSION['game_save']['items'], 'pos'))) {
-        return "You already have an item!";
-    } else {
-        return "There's no item here!";
+    // loop through all the words the user entered
+    foreach ($command as $commandValue) {
+        // loop through all the items to pick up
+        foreach ($_SESSION['game_save']['items'] as $item => $value) {
+            // if the item exists in the location
+            if (in_array($commandValue, $value['name']) && getXYZ() == $value['pos']) {
+                $_SESSION['game_save']['items'][$item]['pos'] = 'i';
+                return "You took the " . $item . "!";
+            }
+            // if the item exists and the user has it
+            elseif (in_array($commandValue, $value['name']) && $value['pos'] == 'i') {
+                return "You already have the " . $item . "!";
+            }
+            // if the item exsit but the user isn't at the location
+            elseif (in_array($commandValue, $value['name']) && getXYZ() != $value['pos']) {
+                return "There is no $item here!";
+            }
+        }
     }
+
+    // otherwise return an error
+    return "You can't pick that up!";
+}
+
+function dropItem($command)
+{
+    // check if there is an item on this space using get XYZ
+    // loop through all the words the user entered
+    foreach ($command as $commandValue) {
+        // loop through all the items to pick up
+        foreach ($_SESSION['game_save']['items'] as $item => $value) {
+            // if the item exists and the user has it
+            if (in_array($commandValue, $value['name']) && $value['pos'] == 'i') {
+                $_SESSION['game_save']['items'][$item]['pos'] = getXYZ();
+                return "You dropped the " . $item . "!";
+            }
+            // if the item exists and the user has it
+            elseif (in_array($commandValue, $value['name']) && $value['pos'] != 'i') {
+                return "You don't have the " . $item . "!";
+            }
+        }
+    }
+
+    // otherwise return an error
+    return "You can't do that!";
+}
+
+// show inventory
+function showInventory()
+{
+    $inventory = "You have a ";
+    foreach ($_SESSION['game_save']['items'] as $item => $value) {
+        if ($value['pos'] == 'i') {
+            $inventory .= $item . ", ";
+        }
+    }
+
+    return substr($inventory, 0, -2);
+}
+
+// get help
+function showHelp()
+{
+    global $commands;
+
+    $inventory = "";
+
+    foreach ($commands as $command => $value) {
+        $inventory .= $command . " - <i>" . $value['description'] . "</i><br>";
+    }
+
+    return $inventory;
+}
+
+// use item
+function useItem($command)
+{
+    foreach ($command as $item) {
+        // loop through all the items to pick up
+        foreach ($_SESSION['game_save']['items'] as $itemName => $value) {
+            // if the item exists and the user has it
+            if (in_array($item, $value['name']) && $value['pos'] == 'i') {
+                // if the item is a key
+                if ($itemName == 'key' && $_SESSION['game_save']['location'] == 14) {
+                    // if the door is locked
+                    if ($_SESSION['game_save']['doorLocked']) {
+                        $_SESSION['game_save']['doorLocked'] = false;
+                        return 'You unlocked the door!';
+                    } else {
+                        return "The door is already unlocked!";
+                    }
+                } else if ($itemName == 'shovel' && $_SESSION['game_save']['location'] == 13) {
+                    // if the location is hilly
+                    if ($_SESSION['game_save']['isHilly']) {
+                        $_SESSION['game_save']['isHilly'] = false;
+                        return 'You dug out the hills!';
+                    } else {
+                        return "You already dug here!";
+                    }
+                } else {
+                    return "You can't use the " . $itemName . "!";
+                }
+            }
+        }
+    }
+
+    return "You don't have the " . $item . "!";
 }

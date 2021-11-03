@@ -13,7 +13,14 @@ if (isset($_SESSION['user'])) {
         $_SESSION['game_save'] = [];
         $_SESSION['game_save']['location'] = 9;
         $_SESSION['game_save']['vertLocation'] = 0;
-        $_SESSION['game_save']['items'] = ['volleyball' => ['pos' => '(0,2,0)'], 'shovel' => ['pos' => '(0,0,0)'], 'food' => ['pos' => '(3,0,1)'], 'key' => ['pos' => '(3,1,-1)']];
+        $_SESSION['game_save']['items'] = [
+            'volleyball' => ['pos' => '(0,2,0)', 'name' => ['volleyball', 'ball']],
+            'shovel' => ['pos' => '(0,0,0)', 'name' => ['shovel']],
+            'food' => ['pos' => '(3,0,1)', 'name' => ['food']],
+            'key' => ['pos' => '(3,1,-1)', 'name' => ['key']],
+        ];
+        $_SESSION['game_save']['isHilly'] = true;
+        $_SESSION['game_save']['doorLocked'] = true;
     }
 
     require('scripts/commands.php');
@@ -34,14 +41,14 @@ if (isset($_SESSION['user'])) {
         if (isset($isCommandValid[1])) {
             // move user north, east, south, and west
             if ($isCommandValid[1] == 'cardinal') {
-                moveAmount($isCommandValid[0]);
+                $commandErrorMsg = moveAmount($isCommandValid[0]);
 
                 // allow user to move two spaces however I don't think this is needed
                 if (in_array("2", $doesCommandExist[2]) or in_array("two", $doesCommandExist[2])) {
                     $isCommandValid = isCommandValid($doesCommandExist);
 
                     if (isset($isCommandValid[1])) {
-                        moveAmount($isCommandValid[0]);
+                        $commandErrorMsg = moveAmount($isCommandValid[0]);
                     }
                 }
             }
@@ -51,7 +58,23 @@ if (isset($_SESSION['user'])) {
             }
             // pick up item
             else if ($isCommandValid[1] == 'take') {
-                $commandErrorMsg = takeItem($isCommandValid[0]);
+                $commandErrorMsg = takeItem($doesCommandExist[2]);
+            }
+            // drop item
+            else if ($isCommandValid[1] == 'drop') {
+                $commandErrorMsg = dropItem($doesCommandExist[2]);
+            }
+            // use item
+            else if ($isCommandValid[1] == 'use') {
+                $commandErrorMsg = useItem($doesCommandExist[2]);
+            }
+            // see inventory
+            else if ($isCommandValid[1] == 'inventory') {
+                $commandErrorMsg = showInventory();
+            }
+            // ask for help
+            else if ($isCommandValid[1] == 'help') {
+                $commandErrorMsg = showHelp();
             }
         }
         // if the command is a valid command, just not in this spot, tell user
