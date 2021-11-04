@@ -55,6 +55,10 @@ button[type="submit"]:hover {
   background-color: var(--blue-dark);
 }
 
+button[type="submit"]:disabled {
+  background-color: var(--gray-dark);
+}
+
 a {
   color: var(--blue);
   text-decoration: underline;

@@ -50,3 +50,7 @@ hr {
   visibility: hidden;
   margin: 0.25rem 0;
 }
+
+.set-width {
+  width: 35vw;
+}

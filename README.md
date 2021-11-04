@@ -4,9 +4,29 @@ This is a remake of the original Zork game, created in PHP.
 
 ## Database Setup
 
+### Table: users
+
 | user_id | name | username | password |
 | ------- | ---- | -------- | -------- |
 | 1       | John | johndoe  | hash     |
+
+### Table: game_save
+
+| id  | user_id | location | vertLocation | items | isHilly | doorLocked | energy |
+| --- | ------- | -------- | ------------ | ----- | ------- | ---------- | ------ |
+| 1   | 4       | 9        | 0            | -     | 1       | 1          | 10     |
+
+### newUserRegister trigger
+
+```sql
+DELIMITER //
+CREATE DEFINER = `root`@`localhost` TRIGGER newUserRegister AFTER INSERT ON users
+FOR EACH ROW BEGIN
+INSERT INTO game_save (`id`, `user_id`, `location`, `vertLocation`, `items`, `isHilly`, `doorLocked`, `energy`)
+VALUES (NULL, new.user_id, 9, 0, 'a:4:{s:10:"volleyball";a:2:{s:3:"pos";s:7:"(0,2,0)";s:4:"name";a:2:{i:0;s:10:"volleyball";i:1;s:4:"ball";}}s:6:"shovel";a:2:{s:3:"pos";s:7:"(0,0,0)";s:4:"name";a:1:{i:0;s:6:"shovel";}}s:4:"food";a:2:{s:3:"pos";s:7:"(3,0,1)";s:4:"name";a:3:{i:0;s:4:"food";i:1;s:4:"beef";i:2;s:5:"jerky";}}s:3:"key";a:2:{s:3:"pos";s:8:"(3,1,-1)";s:4:"name";a:1:{i:0;s:3:"key";}}}', 1, 1, 10);
+END;;
+DELIMITER ;
+```
 
 ## $\_SESSION Format
 
