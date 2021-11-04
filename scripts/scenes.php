@@ -64,7 +64,7 @@ $scenes[5] = array(
 $scenes[6] = array(
     'location' => 'The Ocean',
     'commands' => array('n', 'e', 's', 'w', 'north', 'east', 'south', 'west'),
-    'story' => array('Seagulls squawk and the water ripples.', 'A ways deeper, a boat floats. It seems you\'ve found people.')
+    'story' => array("Seagulls squawk and the water ripples.", "A ways deeper, a boat floats. It seems you\'ve found people.")
 );
 $scenes[7] = array(
     'location' => 'The Ocean',
@@ -90,7 +90,7 @@ $scenes[10] = array(
 $scenes[11] = array(
     'location' => 'QUICKSAND',
     'commands' => array('w', 'west'), // the only way out is to have the shovel and use it
-    'story' => array('Suddenly, the ground seemingly start to rise.', 'You\'ve found yourself stuck in a patch of quicksand.', 'A shovel might be the only escape.')
+    'story' => array("Suddenly, the ground seemingly start to rise.", "You\'ve found yourself stuck in a patch of quicksand.", "A shovel might be the only escape.")
 );
 $scenes[12] = array(
     'location' => 'The Swamp',
@@ -110,7 +110,7 @@ $scenes[14] = array(
 $scenes[15] = array(
     'location' => 'The Safe House',
     'commands' => array('w', 'west'), // enter pin code to win
-    'story' => array('It\'s almost as if you\'ve entered an abandonded safe house.', 'On the wall you notice a keypad.', '<span id="pin">Enter pin: </span>')
+    'story' => array("It\'s almost as if you\'ve entered an abandonded safe house.", "On the wall you notice a keypad.", '<span id="pin">Enter pin: </span>')
 );
 $scenes[16] = array(
     'location' => 'The End',

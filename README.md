@@ -17,6 +17,10 @@ Has the following keys:
 - - location (0-16)
 - - inventory (array of items)
 - - vertLocation (-1, 0, or 1)
+- - items
+- - - an assoiative array of the items and their pos (such as 1,1,0 or in an inventory) and names (volleyball, ball, etc.)
+- - isHilly (whether Craggy Crove has been dug out)
+- - doorLocked (whether the door has been unlocked)
 
 ## Functions
 
@@ -30,4 +34,24 @@ Has the following keys:
 
 **`setLocation`** sets the current location given an increment
 
+**`getVertLocation`** returns vertical location
+
+**`setVertLocation`** sets vertical location
+
+**`getXYZ`** returns the XYZ coordinates of the player
+
 **`moveAmount`** moves the player in the given direction using `setLocation`
+
+**`moveVertical`** moves the player vertically
+
+**`takeItem`** picks up an item from the tile
+
+**`dropItem`** drops an item in the current location
+
+**`showInventory`** displays player inventory
+
+**`showHelp`** lists all main game commands
+
+**`useItem`** uses a given item in the player's inventory
+
+**`enterPin`** enters the pin to win the game in the "safe house"

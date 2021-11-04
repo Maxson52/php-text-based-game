@@ -12,9 +12,6 @@ function doesCommandExist($command)
 
     // check if command is valid where command is an array of all the words, value is each word
     foreach ($command as $key => $value) {
-        echo "Does: " . $value == "0712";
-        echo $_SESSION['game_save']['location'];
-
         if (array_key_exists($value, $commands)) {
             return [$value, $commands[$value], $command];
         }

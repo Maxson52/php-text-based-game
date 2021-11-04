@@ -45,3 +45,8 @@ span {
   font-weight: bold;
   font-style: italic;
 }
+
+hr {
+  visibility: hidden;
+  margin: 0.25rem 0;
+}

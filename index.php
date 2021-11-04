@@ -106,12 +106,19 @@ if (isset($_SESSION['user'])) {
         <link rel="stylesheet" href="css/global.css">
         <link rel="stylesheet" href="css/game.css">
         <link rel="stylesheet" href="css/form.css">
+
+        <!-- import type animation -->
+        <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
     </head>
 
     <body>
         <div class="content">
             <h1>Welcome <?php echo $_SESSION['user']['name'] ?></h1>
 
+            <a href="">Save</a>
+            ·
+            <a href="">Reset</a>
+            ·
             <a href="logout.php">Logout</a>
 
             <div class="game">
@@ -124,18 +131,28 @@ if (isset($_SESSION['user'])) {
 
                 // foreach storyline of the current location echo the description
                 if (getVertLocation() == 1) {
-                    foreach (getLocation()['story-up'] as $story) {
-                        echo "<p>" . $story . "</p>";
-                    }
+                    $key = $_SESSION['game_save']['location'];
+                    $story = implode("<hr>", getLocation()['story-up']);
                 } else if (getVertLocation() == -1) {
-                    foreach (getLocation()['story-down'] as $story) {
-                        echo "<p>" . $story . "</p>";
-                    }
+                    $key = $_SESSION['game_save']['location'];
+                    $story = implode("<hr>", getLocation()['story-down']);
                 } else {
-                    foreach (getLocation()['story'] as $story) {
-                        echo "<p>" . $story . "</p>";
-                    }
+                    $key = $_SESSION['game_save']['location'];
+                    $story = implode("<hr>", getLocation()['story']);
                 }
+
+                // then echo the effect
+                echo "<p class='story$key'></p>";
+
+                echo
+                "<script>
+                        let typed$key = new Typed('.story$key', {
+                            strings: ['" . $story . "'],
+                            typeSpeed: 10,
+                            loop: false,
+                            showCursor: false
+                        });
+                    </script>";
 
 
                 // echo the users command
@@ -153,7 +170,6 @@ if (isset($_SESSION['user'])) {
                 <button type="submit" name="submitBtn"><i class="fas fa-arrow-right"></i></button>
             </form>
         </div>
-
     </body>
 
     </html>
