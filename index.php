@@ -11,22 +11,6 @@ if (isset($_SESSION['user'])) {
 
     require('scripts/game_save.php');
 
-    // game vars
-    if (!isset($_SESSION['game_save'])) {
-        $_SESSION['game_save'] = [];
-        $_SESSION['game_save']['location'] = 9;
-        $_SESSION['game_save']['vertLocation'] = 0;
-        $_SESSION['game_save']['items'] = [
-            'volleyball' => ['pos' => '(0,2,0)', 'name' => ['volleyball', 'ball']],
-            'shovel' => ['pos' => '(0,0,0)', 'name' => ['shovel']],
-            'food' => ['pos' => '(3,0,1)', 'name' => ['food', 'beef', 'jerky']],
-            'key' => ['pos' => '(3,1,-1)', 'name' => ['key']],
-        ];
-        $_SESSION['game_save']['isHilly'] = true;
-        $_SESSION['game_save']['doorLocked'] = true;
-        $_SESSION['game_save']['energy'] = 10;
-    }
-
     // save or reset game
     if (isset($_GET['fn'])) {
         if ($_GET['fn'] == "reset") {
@@ -91,7 +75,7 @@ if (isset($_SESSION['user'])) {
             }
             // see inventory
             else if ($isCommandValid[1] == 'inventory') {
-                $commandErrorMsg = showInventory();
+                $commandErrorMsg = showInventory(false);
             }
             // ask for help
             else if ($isCommandValid[1] == 'help') {
@@ -99,7 +83,7 @@ if (isset($_SESSION['user'])) {
             }
             // check energy
             else if ($isCommandValid[1] == 'energy') {
-                $commandErrorMsg = getEnergy();
+                $commandErrorMsg = getEnergy(false);
             }
             // go
             else if ($isCommandValid[1] == 'go') {
@@ -109,6 +93,10 @@ if (isset($_SESSION['user'])) {
             // enter pin
             else if ($isCommandValid[1] == 'pin') {
                 $commandErrorMsg = enterPin($doesCommandExist[2]);
+            }
+            // toggle gui
+            else if ($isCommandValid[1] == 'gui') {
+                $commandErrorMsg = toggleGui();
             }
         }
         // if the command is a valid command, just not in this spot, tell user
@@ -159,8 +147,11 @@ if (isset($_SESSION['user'])) {
                 // echo the location of the current location
                 echo "<h2 class='location'>" . getLocation()['location'] . "</h2>";
 
-                // echo the coordinates of the user
-                echo "<h3 class='coordinates'>" . getXYZ() . "</h3>";
+                if ($_SESSION['game_save']['gui']) {
+                    echo "<div class='gui'>";
+                    echo "<h3>" . getXYZ() . " - " . showInventory(true) . " - " . getEnergy(true) . "</h3>";
+                    echo "</div>";
+                }
 
                 // foreach storyline of the current location echo the description
                 if (getVertLocation() == 1) {
@@ -200,8 +191,8 @@ if (isset($_SESSION['user'])) {
             </div>
 
             <form id="commandForm" class="row" action="index.php" method="POST">
-                <input type="text" name="command" placeholder="Enter a command" autocomplete="off" autofocus <?php echo $_SESSION['game_save']['energy'] <= 0 ? "disabled" : "" ?>>
-                <button type="submit" name="submitBtn" <?php echo $_SESSION['game_save']['energy'] <= 0 ? "disabled" : "" ?>><i class="fas fa-arrow-right"></i></button>
+                <input type="text" name="command" placeholder="Enter a command" autocomplete="off" autofocus <?php echo $_SESSION['game_save']['energy'] <= 0 || $_SESSION['game_save']['location'] == 16 ? "disabled" : "" ?>>
+                <button type="submit" name="submitBtn" <?php echo $_SESSION['game_save']['energy'] <= 0 || $_SESSION['game_save']['location'] == 16 ? "disabled" : "" ?>><i class="fas fa-arrow-right"></i></button>
             </form>
         </div>
     </body>

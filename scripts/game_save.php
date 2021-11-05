@@ -37,6 +37,7 @@ function resetGame()
     $_SESSION['game_save']['isHilly'] = true;
     $_SESSION['game_save']['doorLocked'] = true;
     $_SESSION['game_save']['energy'] = 10;
+    $_SESSION['game_save']['gui'] = false;
 
     saveGame();
 }
@@ -59,5 +60,6 @@ function loadGame()
         $_SESSION['game_save']['isHilly'] = $row['isHilly'] == 1 ? true : false;
         $_SESSION['game_save']['doorLocked'] = $row['doorLocked'] == 1 ? true : false;
         $_SESSION['game_save']['energy'] = $row['energy'];
+        $_SESSION['game_save']['gui'] = $row['gui'] == 1 ? true : false;
     }
 }

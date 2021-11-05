@@ -30,30 +30,15 @@ function isCommandValid($command)
 {
     global $scenes;
 
-    // check for oddball commands
-    if ($command[1]['type'] == 'take') {
-        return [$command[0], $command[1]['type']];
-    } else if ($command[1]['type'] == 'drop') {
-        return [$command[0], $command[1]['type']];
-    } else if ($command[1]['type'] == 'inventory') {
-        return [$command[0], $command[1]['type']];
-    } else if ($command[1]['type'] == 'help') {
-        return [$command[0], $command[1]['type']];
-    } else if ($command[1]['type'] == 'use') {
-        return [$command[0], $command[1]['type']];
-    } else if ($command[1]['type'] == 'pin') {
-        return [$command[0], $command[1]['type']];
-    } else if ($command[1]['type'] == 'energy') {
-        return [$command[0], $command[1]['type']];
-    } else if ($command[1]['type'] == 'go') {
-        return [$command[0], $command[1]['type']];
-    }
-
-    // check if (movement) command is valid
-    if (in_array($command[0], $scenes[$_SESSION['game_save']['location']]['commands'])) {
-        return [$command[0], $command[1]['type']];
+    // check if command is a movement command (because it is NOT valid in all locations) otherwise do do normal thing
+    if ($command[1]['type'] == 'cardinal' || $command[1]['type'] == 'vertical') {
+        if (in_array($command[0], $scenes[$_SESSION['game_save']['location']]['commands'])) {
+            return [$command[0], $command[1]['type']];
+        } else {
+            return ['error' => $command[1]['error']];
+        }
     } else {
-        return ['error' => $command[1]['error']];
+        return [$command[0], $command[1]['type']];
     }
 }
 
@@ -104,7 +89,7 @@ function moveAmount($direction)
 
     if ($_SESSION['game_save']['location'] == 13 && $_SESSION['game_save']['isHilly']) return "The landscape is too hilly to continue this way!";
     if ($_SESSION['game_save']['location'] == 14 && $_SESSION['game_save']['doorLocked']) return "The door is locked!";
-    if ($_SESSION['game_save']['location'] == 11 && $_SESSION['game_save']['doorLocked']) energyLoss(rand(1, 3));
+    if ($_SESSION['game_save']['location'] == 11) energyLoss(rand(1, 3));
 
     if ($direction == 'n' or $direction == 'north') {
         setLocation(-4);
@@ -183,7 +168,7 @@ function takeItem($command)
             elseif (in_array($commandValue, $value['name']) && $value['pos'] == 'i') {
                 return "You already have the " . $item . "!";
             }
-            // if the item exsit but the user isn't at the location
+            // if the item exists but the user isn't at the location
             elseif (in_array($commandValue, $value['name']) && getXYZ() != $value['pos']) {
                 return "There is no $item here!";
             }
@@ -218,7 +203,7 @@ function dropItem($command)
 }
 
 // show inventory
-function showInventory()
+function showInventory($emoji)
 {
     $inventory = [];
 
@@ -231,7 +216,16 @@ function showInventory()
     if (empty($inventory)) {
         return "You have nothing in your inventory!";
     } else {
-        return "You have a " . implode(", a ", $inventory);
+        if ($emoji) {
+            $inventory = str_replace('key', '🔑', $inventory);
+            $inventory = str_replace('shovel', '⛏️', $inventory);
+            $inventory = str_replace('volleyball', '🏐', $inventory);
+            $inventory = str_replace('food', '🥩', $inventory);
+
+            return "You have a " . implode(", ", $inventory);
+        } else {
+            return "You have a " . implode(", a ", $inventory);
+        }
     }
 }
 
@@ -246,7 +240,7 @@ function showHelp()
         $inventory .= $command . " - <i>" . $value['description'] . "</i><br>";
     }
 
-    return $inventory;
+    return "Think critically to get off the island. Use all the tools you find, notice clues, and read carefully to live another day. <br> Enter any of the following commands to play: <br> " . $inventory;
 }
 
 // use item
@@ -287,7 +281,7 @@ function useItem($command)
                     // remove food from inventory
                     $_SESSION['game_save']['items'][$itemName]['pos'] = '';
                     // return message
-                    return 'Delicious! ' . getEnergy();
+                    return 'Delicious! ' . getEnergy(false);
                 } else {
                     return "You can't use the " . $itemName . "!";
                 }
@@ -323,9 +317,9 @@ function energyLoss($loss)
 
     if (1 <= $_SESSION['game_save']['energy'] && $_SESSION['game_save']['energy']  <= 3) {
         return $energy_levels['low'][rand(0, 2)];
-    } else if (4 <= $_SESSION['game_save']['energy'] && $_SESSION['game_save']['energy'] <= 7) {
+    } else if (4 <= $_SESSION['game_save']['energy'] && $_SESSION['game_save']['energy'] <= 6) {
         return $energy_levels['medium'][rand(0, 2)];
-    } else if (8 <= $_SESSION['game_save']['energy'] && $_SESSION['game_save']['energy'] <= 10) {
+    } else if (7 <= $_SESSION['game_save']['energy'] && $_SESSION['game_save']['energy'] <= 10) {
         return $energy_levels['high'][rand(0, 2)];
     } else if ($_SESSION['game_save']['energy'] <= 0) {
         return "You ran out of energy ⚡! Game over!";
@@ -346,9 +340,13 @@ function randomEnergyLoss()
 }
 
 // get energy 
-function getEnergy()
+function getEnergy($shortForm)
 {
-    return "You have " . $_SESSION['game_save']['energy'] . " energy ⚡ points left.";
+    if ($shortForm) {
+        return $_SESSION['game_save']['energy'] . "⚡";
+    } else {
+        return "You have " . $_SESSION['game_save']['energy'] . " energy ⚡ points left.";
+    }
 }
 
 // go somewhere
@@ -375,4 +373,10 @@ function go($userCommands)
     }
 
     return "You can't go there!";
+}
+
+// toggle gui
+function toggleGui()
+{
+    $_SESSION['game_save']['gui'] = !$_SESSION['game_save']['gui'];
 }
