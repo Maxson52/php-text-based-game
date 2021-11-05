@@ -240,7 +240,7 @@ function showHelp()
         $inventory .= $command . " - <i>" . $value['description'] . "</i><br>";
     }
 
-    return "Think critically to get off the island. Use all the tools you find, notice clues, and read carefully to live another day. <br> Enter any of the following commands to play: <br> " . $inventory;
+    return "Think critically to get off the island. Use all the tools you find, notice clues, and read carefully to make it off the island. <br> Enter any of the following commands to play: <br> " . $inventory;
 }
 
 // use item

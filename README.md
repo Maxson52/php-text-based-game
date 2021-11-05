@@ -75,3 +75,13 @@ Has the following keys:
 **`useItem`** uses a given item in the player's inventory
 
 **`enterPin`** enters the pin to win the game in the "safe house"
+
+**`energyLoss`** removes energy from the player and returns a message based on the amount of energy left
+
+**`randomEnergyLoss`** removes a random amount of energy and calls `energyLoss`
+
+**`getEnergy`** returns the current energy of the player (it takes a parameter shortForm to return the energy as a short number)
+
+**`go`** checks if the player is next to the tent, otherwise moves normally
+
+**`toggleGui`** toggles the modern gui

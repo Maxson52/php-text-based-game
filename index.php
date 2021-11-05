@@ -140,7 +140,7 @@ if (isset($_SESSION['user'])) {
             ·
             <a href="?fn=reset" onclick="return confirm('Are you sure you want to reset all progress?')">Reset</a>
             ·
-            <a href="logout.php" onclick="return confirm('Are you sure you want sign out?')">Sign out</a>
+            <a href="logout.php" onclick="return confirm('Are you sure you want sign out? All unsaved progress will be lost!')">Sign out</a>
 
             <div class="game">
                 <?php
@@ -149,7 +149,7 @@ if (isset($_SESSION['user'])) {
 
                 if ($_SESSION['game_save']['gui']) {
                     echo "<div class='gui'>";
-                    echo "<h3>" . getXYZ() . " - " . showInventory(true) . " - " . getEnergy(true) . "</h3>";
+                    echo "<h3>" . getXYZ() . " - <span class='backpack'>🎒</span><span class='inventory'></span> - " . getEnergy(true) . "</h3>";
                     echo "</div>";
                 }
 
@@ -191,10 +191,36 @@ if (isset($_SESSION['user'])) {
             </div>
 
             <form id="commandForm" class="row" action="index.php" method="POST">
-                <input type="text" name="command" placeholder="Enter a command" autocomplete="off" autofocus <?php echo $_SESSION['game_save']['energy'] <= 0 || $_SESSION['game_save']['location'] == 16 ? "disabled" : "" ?>>
+                <input type="text" name="command" placeholder="Enter a command" autocomplete="off" required autofocus <?php echo $_SESSION['game_save']['energy'] <= 0 || $_SESSION['game_save']['location'] == 16 ? "disabled" : "" ?>>
                 <button type="submit" name="submitBtn" <?php echo $_SESSION['game_save']['energy'] <= 0 || $_SESSION['game_save']['location'] == 16 ? "disabled" : "" ?>><i class="fas fa-arrow-right"></i></button>
             </form>
         </div>
+
+        <!-- not working -->
+        <embed src="assets/backgroundMusic.mp3" loop="true" autostart="true" width="2" height="0">
+
+        <!-- code for inventory hover -->
+        <script>
+            let backpack = document.querySelector('.backpack');
+
+            let typedInventory = undefined;
+
+            backpack.addEventListener('mouseover', function() {
+                typedInventory = new Typed('.inventory', {
+                    strings: ['<?php echo showInventory(true) ?>', ''],
+                    showCursor: false,
+                    backSpeed: 1,
+                    typeSpeed: 1,
+                });
+                // fix here
+            });
+
+            backpack.addEventListener('mouseout', function() {
+                console.log('out');
+                typedInventory.start();
+
+            });
+        </script>
     </body>
 
     </html>
