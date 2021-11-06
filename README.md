@@ -12,9 +12,9 @@ This is a remake of the original Zork game, created in PHP.
 
 ### Table: game_save
 
-| id  | user_id | location | vertLocation | items | isHilly | doorLocked | energy |
-| --- | ------- | -------- | ------------ | ----- | ------- | ---------- | ------ |
-| 1   | 4       | 9        | 0            | -     | 1       | 1          | 10     |
+| id  | user_id | location | vertLocation | items | isHilly | doorLocked | energy | gui |
+| --- | ------- | -------- | ------------ | ----- | ------- | ---------- | ------ | --- |
+| 1   | 4       | 9        | 0            | -     | 1       | 1          | 10     | 0   |
 
 ### newUserRegister trigger
 
@@ -22,9 +22,10 @@ This is a remake of the original Zork game, created in PHP.
 DELIMITER //
 CREATE DEFINER = `root`@`localhost` TRIGGER newUserRegister AFTER INSERT ON users
 FOR EACH ROW BEGIN
-INSERT INTO game_save (`id`, `user_id`, `location`, `vertLocation`, `items`, `isHilly`, `doorLocked`, `energy`)
-VALUES (NULL, new.user_id, 9, 0, 'a:4:{s:10:"volleyball";a:2:{s:3:"pos";s:7:"(0,2,0)";s:4:"name";a:2:{i:0;s:10:"volleyball";i:1;s:4:"ball";}}s:6:"shovel";a:2:{s:3:"pos";s:7:"(0,0,0)";s:4:"name";a:1:{i:0;s:6:"shovel";}}s:4:"food";a:2:{s:3:"pos";s:7:"(3,0,1)";s:4:"name";a:3:{i:0;s:4:"food";i:1;s:4:"beef";i:2;s:5:"jerky";}}s:3:"key";a:2:{s:3:"pos";s:8:"(3,1,-1)";s:4:"name";a:1:{i:0;s:3:"key";}}}', 1, 1, 10);
+INSERT INTO game_save (`id`, `user_id`, `location`, `vertLocation`, `items`, `isHilly`, `doorLocked`, `energy`, `gui`)
+VALUES (NULL, new.user_id, 9, 0, 'a:4:{s:10:"volleyball";a:2:{s:3:"pos";s:7:"(0,2,0)";s:4:"name";a:2:{i:0;s:10:"volleyball";i:1;s:4:"ball";}}s:6:"shovel";a:2:{s:3:"pos";s:7:"(0,0,0)";s:4:"name";a:1:{i:0;s:6:"shovel";}}s:4:"food";a:2:{s:3:"pos";s:7:"(3,0,1)";s:4:"name";a:3:{i:0;s:4:"food";i:1;s:4:"beef";i:2;s:5:"jerky";}}s:3:"key";a:2:{s:3:"pos";s:8:"(3,1,-1)";s:4:"name";a:1:{i:0;s:3:"key";}}}', 1, 1, 10, 0);
 END;;
+//
 DELIMITER ;
 ```
 
@@ -38,9 +39,10 @@ Has the following keys:
 - - inventory (array of items)
 - - vertLocation (-1, 0, or 1)
 - - items
-- - - an assoiative array of the items and their pos (such as 1,1,0 or in an inventory) and names (volleyball, ball, etc.)
-- - isHilly (whether Craggy Crove has been dug out)
+- - - an associative array of the items and their pos (such as 1,1,0 or in an inventory) and names (volleyball, ball, etc.)
+- - isHilly (whether Craggy Cliff has been dug out)
 - - doorLocked (whether the door has been unlocked)
+- - gui (bool, determines whether the easy to read gui is enabled)
 
 ## Functions
 
@@ -75,3 +77,15 @@ Has the following keys:
 **`useItem`** uses a given item in the player's inventory
 
 **`enterPin`** enters the pin to win the game in the "safe house"
+
+**`energyLoss`** removes energy from the player and returns a message based on the amount of energy left
+
+**`randomEnergyLoss`** removes a random amount of energy and calls `energyLoss`
+
+**`getEnergy`** returns the current energy of the player (it takes a parameter shortForm to return the energy as a short number)
+
+**`go`** checks if the player is next to the tent, otherwise moves normally
+
+**`toggleGui`** toggles the modern gui
+
+**`getHint`** returns a hint

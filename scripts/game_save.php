@@ -13,9 +13,10 @@ function saveGame()
     $hill = $_SESSION['game_save']['isHilly'] ? 1 : 0;
     $door = $_SESSION['game_save']['doorLocked'] ? 1 : 0;
     $energy = $_SESSION['game_save']['energy'];
+    $gui = $_SESSION['game_save']['gui'];
 
     // create and perform update query
-    $query = "UPDATE `game_save` SET `location` = '$location', `vertLocation` = '$vertLocation', `items` = '$items', `isHilly` = '$hill', `doorLocked` = '$door', `energy` = '$energy' WHERE `game_save`.`user_id` = $uid";
+    $query = "UPDATE `game_save` SET `location` = '$location', `vertLocation` = '$vertLocation', `items` = '$items', `isHilly` = '$hill', `doorLocked` = '$door', `energy` = '$energy', `gui` = '$gui' WHERE `game_save`.`user_id` = $uid";
     $result = mysqli_query($conn, $query) or die(mysqli_error($conn) . "BADBAD");
 
     // return result
@@ -37,6 +38,7 @@ function resetGame()
     $_SESSION['game_save']['isHilly'] = true;
     $_SESSION['game_save']['doorLocked'] = true;
     $_SESSION['game_save']['energy'] = 10;
+    $_SESSION['game_save']['gui'] = false;
 
     saveGame();
 }
@@ -59,5 +61,6 @@ function loadGame()
         $_SESSION['game_save']['isHilly'] = $row['isHilly'] == 1 ? true : false;
         $_SESSION['game_save']['doorLocked'] = $row['doorLocked'] == 1 ? true : false;
         $_SESSION['game_save']['energy'] = $row['energy'];
+        $_SESSION['game_save']['gui'] = $row['gui'] == 1 ? true : false;
     }
 }

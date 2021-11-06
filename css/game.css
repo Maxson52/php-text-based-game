@@ -54,3 +54,7 @@ hr {
 .set-width {
   width: 35vw;
 }
+
+.backpack {
+  cursor: pointer;
+}
