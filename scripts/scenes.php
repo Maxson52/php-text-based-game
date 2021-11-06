@@ -20,6 +20,9 @@ $commands = [
     'grab' => ['description' => 'You take the item.', 'error' => 'You can\'t take that.', 'type' => 'take'],
     'drop' => ['description' => 'You drop the item.', 'error' => 'You can\'t drop that.', 'type' => 'drop'],
     'use' => ['description' => 'You use an item in your inventory.', 'error' => 'You can\'t use that here.', 'type' => 'use'],
+    'eat' => ['description' => 'You eat food.', 'error' => 'You can\'t use that here.', 'type' => 'use'],
+    'dig' => ['description' => 'You dig.', 'error' => 'You can\'t use that here.', 'type' => 'use'],
+    'unlock' => ['description' => 'You unlock a door.', 'error' => 'You can\'t use that here.', 'type' => 'use'],
     'energy' => ['description' => 'You notice your energy levels.', 'error' => '', 'type' => 'energy'],
     'inventory' => ['description' => 'You access your inventory.', 'error' => '', 'type' => 'inventory'],
     'i' => ['description' => 'You access your inventory.', 'error' => '', 'type' => 'inventory'],
@@ -27,6 +30,7 @@ $commands = [
     'help' => ['description' => 'How\'d you get here?', 'error' => '', 'type' => 'help'],
     'h' => ['description' => 'How\'d you get here?', 'error' => '', 'type' => 'help'],
     '?' => ['description' => 'How\'d you get here?', 'error' => '', 'type' => 'help'],
+    'hint' => ['description' => 'You receive a helpful hint.', 'error' => '', 'type' => 'hint'],
 ];
 
 // create energy level descriptions
@@ -34,6 +38,17 @@ $energy_levels = [
     'low' => ['You are low on energy.', 'You must eat soon.', 'Your energy is getting too low to continue.'],
     'medium' => ['You have a medium level of energy.', 'Careful, you are losing energy fast.', 'Your energy level is depleting.'],
     'high' => ['You are high on energy.', 'You have enough energy to last a lifetime.', 'With this kind of energy, you are ready for anything!'],
+];
+
+// make hints for the player
+$hints = [
+    'The south-east section of the ocean a key glimmers at the floor of the water.',
+    'A shovel may come in handy if the terrain is too difficult to continue.',
+    'Any sign of life could be crutial. Check for any forgotten items that might prove to be useful.',
+    'Watch out, using too much energy is the difference between finding a way out and not.',
+    'The north-west-ward section of the island seems to have the best sand for sandcastles.',
+    'Quicksand is dangerous stuff, be sure to steer clear of it.',
+    'This island was once populated by many, surely there is something they have left for you.'
 ];
 
 // create a scenes array with 16 scenes

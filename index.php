@@ -1,15 +1,16 @@
 <?php
 session_start();
 if (isset($_SESSION['user'])) {
+    require('scripts/game_save.php');
+    require('scripts/commands.php');
+
     // default vars
     $yourCommand = "";
     $doesCommandExist['error'] = "";
     $isCommandValid[0] = '';
     $isCommandValid[1] = '';
     $commandErrorMsg = '';
-    $energyRes = '';
-
-    require('scripts/game_save.php');
+    $energyRes = energyLoss(0);
 
     // save or reset game
     if (isset($_GET['fn'])) {
@@ -22,8 +23,6 @@ if (isset($_SESSION['user'])) {
         $url = substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], "?"));
         header("Location: " . $url);
     }
-
-    require('scripts/commands.php');
 
     // all logic in here
     if (isset($_POST['submitBtn'])) {
@@ -98,6 +97,10 @@ if (isset($_SESSION['user'])) {
             else if ($isCommandValid[1] == 'gui') {
                 $commandErrorMsg = toggleGui();
             }
+            // get hint
+            else if ($isCommandValid[1] == 'hint') {
+                $commandErrorMsg = getHint();
+            }
         }
         // if the command is a valid command, just not in this spot, tell user
         else {
@@ -129,7 +132,8 @@ if (isset($_SESSION['user'])) {
         <link rel="stylesheet" href="css/form.css">
 
         <!-- import type animation -->
-        <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+        <script src="https://unpkg.com/typewriter-effect@latest/dist/core.js"></script>
+
     </head>
 
     <body>
@@ -171,12 +175,13 @@ if (isset($_SESSION['user'])) {
                 // kinda slow
                 echo
                 "<script>
-                        let typed$key = new Typed('.story$key', {
-                            strings: ['" . $story . "<hr>" . $energyRes . "'],
-                            typeSpeed: 1,
+                        let type$key = new Typewriter('.story$key', {
                             loop: false,
-                            showCursor: false
+                            cursor: '',
+                            delay: 5,
                         });
+
+                        type$key.typeString('" . $story . "<hr>" . $energyRes . "').start();
                     </script>";
 
 
@@ -200,27 +205,28 @@ if (isset($_SESSION['user'])) {
         <embed src="assets/backgroundMusic.mp3" loop="true" autostart="true" width="2" height="0">
 
         <!-- code for inventory hover -->
-        <script>
-            let backpack = document.querySelector('.backpack');
+        <?php if ($_SESSION['game_save']['gui']) { ?>
+            <script>
+                let backpack = document.querySelector('.backpack');
+                let inventory;
 
-            let typedInventory = undefined;
+                backpack.addEventListener('mouseover', () => {
 
-            backpack.addEventListener('mouseover', function() {
-                typedInventory = new Typed('.inventory', {
-                    strings: ['<?php echo showInventory(true) ?>', ''],
-                    showCursor: false,
-                    backSpeed: 1,
-                    typeSpeed: 1,
+                    inventory = new Typewriter('.inventory', {
+                        loop: false,
+                        cursor: '',
+                        delay: 5,
+
+                    });
+
+                    inventory.typeString('<?php echo showInventory(true) ?>').start();
                 });
-                // fix here
-            });
 
-            backpack.addEventListener('mouseout', function() {
-                console.log('out');
-                typedInventory.start();
-
-            });
-        </script>
+                backpack.addEventListener('mouseout', function() {
+                    inventory.deleteAll(5).start();
+                });
+            </script>
+        <?php } ?>
     </body>
 
     </html>

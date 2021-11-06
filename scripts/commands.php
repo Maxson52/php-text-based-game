@@ -13,6 +13,14 @@ function doesCommandExist($command)
     // check if command is valid where command is an array of all the words, value is each word
     foreach ($command as $key => $value) {
         if (array_key_exists($value, $commands)) {
+            if ($value == 'eat') {
+                $command[] = 'food';
+            } else if ($value == 'dig') {
+                $command[] = 'shovel';
+            } else if ($value == 'unlock') {
+                $command[] = 'key';
+            }
+
             return [$value, $commands[$value], $command];
         }
         // if on the final tile, you are entering a pin
@@ -30,7 +38,7 @@ function isCommandValid($command)
 {
     global $scenes;
 
-    // check if command is a movement command (because it is NOT valid in all locations) otherwise do do normal thing
+    // check if command is a movement command (because they are NOT valid in all locations) otherwise do normal thing
     if ($command[1]['type'] == 'cardinal' || $command[1]['type'] == 'vertical') {
         if (in_array($command[0], $scenes[$_SESSION['game_save']['location']]['commands'])) {
             return [$command[0], $command[1]['type']];
@@ -222,7 +230,7 @@ function showInventory($emoji)
             $inventory = str_replace('volleyball', '🏐', $inventory);
             $inventory = str_replace('food', '🥩', $inventory);
 
-            return "You have a " . implode(", ", $inventory);
+            return "You have " . implode(", ", $inventory);
         } else {
             return "You have a " . implode(", a ", $inventory);
         }
@@ -236,8 +244,11 @@ function showHelp()
 
     $inventory = "";
 
+    // only show some of the commands
     foreach ($commands as $command => $value) {
-        $inventory .= $command . " - <i>" . $value['description'] . "</i><br>";
+        if ($command == 'north' || $command == 'south' || $command == 'east' || $command == 'west' || $command == 'up' || $command == 'down' || $command == 'go' || $command == 'take' || $command == 'drop' || $command == 'energy' || $command == 'inventory' || $command == 'gui' || $command == 'help' || $command == 'hint') {
+            $inventory .= "<u>" . $command . "</u> - <i>" . $value['description'] . "</i><br>";
+        }
     }
 
     return "Think critically to get off the island. Use all the tools you find, notice clues, and read carefully to make it off the island. <br> Enter any of the following commands to play: <br> " . $inventory;
@@ -379,4 +390,12 @@ function go($userCommands)
 function toggleGui()
 {
     $_SESSION['game_save']['gui'] = !$_SESSION['game_save']['gui'];
+}
+
+// get hint
+function getHint()
+{
+    global $hints;
+
+    return $hints[rand(0, count($hints) - 1)];
 }
