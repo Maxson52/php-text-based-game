@@ -10,7 +10,7 @@ if (isset($_SESSION['user'])) {
     $isCommandValid[0] = '';
     $isCommandValid[1] = '';
     $commandErrorMsg = '';
-    $energyRes = energyLoss(0);
+    $energyRes = $_SESSION['game_save']['location'] == 9 && $_SESSION['game_save']['energy'] == 10 ? 'Play by typing in the command box. Type <i>help</i> or <i>?</i> for help.' : getEnergy(0);
 
     // save or reset game
     if (isset($_GET['fn'])) {
@@ -107,6 +107,9 @@ if (isset($_SESSION['user'])) {
             $commandErrorMsg = $isCommandValid['error'];
         }
 
+        // refresh scene (because of ternary operators that are used to show if there is an item on a spot)
+        setScene();
+
         // empty $_POST array
         $_POST = [];
     }
@@ -144,7 +147,7 @@ if (isset($_SESSION['user'])) {
             ·
             <a href="?fn=reset" onclick="return confirm('Are you sure you want to reset all progress?')">Reset</a>
             ·
-            <a href="logout.php" onclick="return confirm('Are you sure you want sign out? All unsaved progress will be lost!')">Sign out</a>
+            <a href="logout.php" onclick="return confirm('Are you sure you want sign out (all progress will be saved)?')">Sign out</a>
 
             <div class="game">
                 <?php
@@ -178,7 +181,7 @@ if (isset($_SESSION['user'])) {
                         let type$key = new Typewriter('.story$key', {
                             loop: false,
                             cursor: '',
-                            delay: 5,
+                            delay: 0.1,
                         });
 
                         type$key.typeString('" . $story . "<hr>" . $energyRes . "').start();
@@ -201,7 +204,7 @@ if (isset($_SESSION['user'])) {
             </form>
         </div>
 
-        <!-- not working -->
+        <!-- audio -->
         <embed src="assets/backgroundMusic.mp3" loop="true" autostart="true" width="2" height="0">
 
         <!-- code for inventory hover -->
