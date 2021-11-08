@@ -44,7 +44,7 @@ $energy_levels = [
 $hints = [
     'The south-east section of the ocean a key glimmers at the floor of the water.',
     'A shovel may come in handy if the terrain is too difficult to continue.',
-    'Any sign of life could be crutial. Check for any forgotten items that might prove to be useful.',
+    'Any sign of life could be crucial. Check for any forgotten items that might prove to be useful.',
     'Watch out, using too much energy is the difference between finding a way out and not.',
     'The north-west-ward section of the island seems to have the best sand for sandcastles.',
     'Quicksand is dangerous stuff, be sure to steer clear of it.',
@@ -77,9 +77,9 @@ function setScene()
     );
     $scenes[3] = array(
         'location' => 'The Boat',
-        'commands' => array('w', 'west'), // grab the food
+        'commands' => array('w', 'west', 's', 'south'), // grab the food
         'story' => array('The boat is right beside you.', 'But the ladder to get up is too far to climb from here.', 'You must stay near the boat to stay afloat, time is of the essence.'),
-        'story-up' => array("Water on all sides, the boat is not a good place to stay.", 'Towards the bow of the ship, you see some delicious beef jerky.', 'It will provide enough energy to get through the day.')
+        'story-up' => ($_SESSION['game_save']['items']['food']['pos'] == "(3,0,1)") ? array("Water on all sides, the boat is not a good place to stay.", 'Towards the bow of the ship, you see some delicious beef jerky.', 'It will provide enough energy to get through the day.') : array("Water on all sides, the boat is not a good place to stay.", "You have already taken the food left on the boat.")
     );
     $scenes[4] = array(
         'location' => 'The Forest',
@@ -129,14 +129,14 @@ function setScene()
         'story' => array('A muddy mess.', 'Your legs are covered in mud, the water could clean you.', 'You see but a hilly valley to the east. To the north is more forest.')
     ); // ended here
     $scenes[13] = array(
-        'location' => $_SESSION['game_save']['isHilly'] ? 'Craggy Cliff' : '<strike>Craggy</strike> Cliff',
+        'location' => $_SESSION['game_save']['isHilly'] ? 'Craggy Cliff' : '<strike>Craggy Cliff</strike> Vacant Valley',
         'commands' => array('n', 'e', 'w', 'north', 'east', 'west'), // use shovel to dig rocks
-        'story' => array('A craggy cliff lies upon you.', 'It seems rocks and mounds of dirt block the path.', 'Stomping on the dirt reveals it is loosely compacted and could be dug out. The rocks can be hauled away.')
+        'story' => ($_SESSION['game_save']['isHilly']) ? array('A craggy cliff lies upon you.', 'It seems rocks and mounds of dirt block the path.', 'Stomping on the dirt reveals it is loosely compacted and could be dug out. The rocks can be hauled away.') : array('The path has opened up, but at what cost?', 'You have expended energy digging and hauling away the dirt and rocks.', 'Was it worth it?'),
     );
     $scenes[14] = array(
         'location' => 'The Tunnel',
         'commands' => array('e', 'w', 'east', 'west'),
-        'story' => array('A door with a small window presents itself right in front of you.', 'Through the window, you see a long, dark tunnel ahead.', 'Nothing around you has seemed useful. This may be your last chance.')
+        'story' => ($_SESSION['game_save']['doorLocked']) ? array('A door with a small window presents itself right in front of you.', 'Through the window, you see a long, dark tunnel ahead.', 'Nothing around you has seemed useful. This may be your last chance.') : array('A door with a small window presents itself right in front of you.', 'You slowly open the door.', 'Ahead is a long, dark tunnel.'),
     );
     $scenes[15] = array(
         'location' => 'The Safe House',
@@ -146,7 +146,7 @@ function setScene()
     $scenes[16] = array(
         'location' => 'The End',
         'commands' => array(), // win
-        'story' => array('The walls start screeching. They lower into the floor to reveal a fridge full of fresh food, a pantry with food to last a lifetime, and a phone to call for help.', 'You have found a way out...', '<h3>The End</h3>')
+        'story' => array('The walls start screeching. They lower into the floor to reveal a fridge full of fresh food, a pantry with food to last a lifetime, and a phone to call for help.', 'You have found a way out...')
     );
 }
 

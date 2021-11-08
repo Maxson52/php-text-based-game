@@ -52,11 +52,12 @@ if (isset($_POST['submitBtn'])) {
         <p class="red"><?php echo $msg ?></p>
 
         <form class="column" action="register.php" method="POST">
+            <!-- Using the required attribute automatically validates empty fields -->
             <input type="text" name="name" placeholder="Name" required>
 
             <input type="text" name="username" placeholder="Username" required>
 
-            <input type="password" name="password" placeholder="Password" required>
+            <input type="password" name="password" placeholder="Password" minlength="5" required>
 
             <button type="submit" name="submitBtn">Sign up <i class="fas fa-arrow-right"></i></button>
         </form>
