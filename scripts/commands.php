@@ -366,7 +366,10 @@ function go($userCommands)
     global $commands;
 
     if ($_SESSION['game_save']['location'] == 8) {
-        return "You peek inside the tent. Inside is nothing but an old volleyball.";
+        if ($_SESSION['game_save']['items']['volleyball']['pos'] == "(0,2,0)")
+            return "You peek inside the tent. Inside is nothing but an old volleyball.";
+        else
+            return "You have been here before. The was a volleyball nestled up inside the tent.";
     } else {
         foreach ($userCommands as $word) {
             if ($word == 'go') continue;
