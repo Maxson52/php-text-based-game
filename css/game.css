@@ -1,5 +1,5 @@
 .game {
-  height: 35vh;
+  height: 42vh;
   /* border: 1px solid var(--gray); */
   margin: 1rem 0;
 
@@ -52,7 +52,11 @@ hr {
 }
 
 .set-width {
-  width: 35vw;
+  width: 45vw;
+}
+
+.gui {
+  position: relative;
 }
 
 .backpack {
@@ -61,21 +65,78 @@ hr {
 
 .energy {
   cursor: pointer;
-  transform: scale(1);
+  font-size: 1em;
+  position: absolute;
 }
 
 .energy:hover {
-  animation: pop 0.5s;
+  animation: pop 0.2s;
 }
 
 @keyframes pop {
   0% {
-    transform: scale(1);
+    font-size: 1em;
   }
   50% {
-    transform: scale(1.5);
+    font-size: 1.2em;
   }
   100% {
-    transform: scale(1);
+    font-size: 1em;
+  }
+}
+
+.coords:hover:before {
+  cursor: pointer;
+
+  animation: change-content 0.2s ease-in-out alternate;
+  animation-fill-mode: forwards;
+}
+
+.coords:not(:hover):before {
+  animation: reverse-change-content 0.2s ease-in-out alternate;
+}
+
+@keyframes change-content {
+  0% {
+    /* content: "abc"; */
+  }
+  50% {
+    color: white;
+  }
+  100% {
+    content: "(x,y,z)";
+  }
+}
+@keyframes reverse-change-content {
+  0% {
+    content: "(x,y,z)";
+  }
+  50% {
+    color: white;
+  }
+  100% {
+    /* content: "(x,y,z)"; */
+  }
+}
+
+.end {
+  animation: win 1s ease-in-out infinite alternate;
+}
+
+@keyframes win {
+  0% {
+    color: #2193b0;
+  }
+  25% {
+    color: #6dd5ed;
+  }
+  50% {
+    color: #1488cc;
+  }
+  75% {
+    color: #20bdff;
+  }
+  100% {
+    color: #0052d4;
   }
 }

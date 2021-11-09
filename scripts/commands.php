@@ -236,7 +236,8 @@ function showInventory($emoji)
     }
 
     if (empty($inventory)) {
-        return "You have nothing in your inventory!";
+        if ($emoji) return "You have nothing!";
+        else return "You have nothing in your inventory!";
     } else {
         if ($emoji) {
             $inventory = str_replace('key', '🔑', $inventory);
@@ -246,7 +247,7 @@ function showInventory($emoji)
 
             return "You have " . implode(", ", $inventory);
         } else {
-            return "You have a " . implode(", a ", $inventory);
+            return "You have a " . implode(" and a ", $inventory);
         }
     }
 }
@@ -261,7 +262,7 @@ function showHelp()
     // only show some of the commands
     foreach ($commands as $command => $value) {
         if ($command == 'north' || $command == 'south' || $command == 'east' || $command == 'west' || $command == 'up' || $command == 'down' || $command == 'go' || $command == 'take' || $command == 'drop' || $command == 'energy' || $command == 'inventory' || $command == 'gui' || $command == 'help' || $command == 'hint') {
-            $inventory .= "<u>" . $command . "</u> - <i>" . $value['description'] . "</i><br>";
+            $inventory .= "<b>" . $command . "</b> - <i>" . $value['description'] . "</i><br>";
         }
     }
 
@@ -389,6 +390,10 @@ function go($userCommands)
         foreach ($userCommands as $word) {
             if ($word == 'go') continue;
 
+            // check if the command is a direction
+            if (!isset($commands[$word])) continue;
+
+
             $valid = isCommandValid([$word, $commands[$word], $userCommands]);
 
             if (!isset($valid['error'])) {
@@ -416,4 +421,30 @@ function getHint()
     global $hints;
 
     return $hints[rand(0, count($hints) - 1)];
+}
+
+// is item in the current spot
+function isItemInCurrentSpot()
+{
+    $items = $_SESSION['game_save']['items'];
+    $spot = [];
+
+    $defaults = [
+        'volleyball' => '(0,2,0)',
+        'shovel' => '(0,0,0)',
+        'food' => '(3,0,1)',
+        'key' => '(3,1,-1)'
+    ];
+
+    foreach ($items as $item => $value) {
+        if ($value['pos'] == getXYZ() && $defaults[$item] != $value['pos']) {
+            $spot[] = $item;
+        }
+    }
+
+    if ($spot == [] || empty($spot)) {
+        return;
+    } else {
+        return "You dropped a " . implode(" and a ", $spot) . " here.";
+    }
 }

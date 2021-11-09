@@ -153,9 +153,14 @@ if (isset($_SESSION['user'])) {
 
                 if ($_SESSION['game_save']['gui']) {
                     echo "<div class='gui'>";
-                    echo "<h3>" . getXYZ() . " - <span class='backpack'>🎒</span><span class='inventory'></span> - <span class='energy'>" . getEnergy(true) . "</span></h3>";
+                    echo "<h3><span class='coords'></span> - <span class='backpack'>🎒</span><span class='inventory'></span> -&nbsp;<span class='energy'>" . getEnergy(true) . "</span></h3>";
                     echo "</div>";
                 }
+
+                // style the coords with ::before
+                echo "<style>";
+                echo ".coords::before { content: '" . getXYZ() . "'; }";
+                echo "</style>";
 
                 // based on the location of the user, echo the story line description
                 if (getVertLocation() == 1) {
@@ -188,7 +193,7 @@ if (isset($_SESSION['user'])) {
                             delay: 0.1,
                         });
 
-                        type$key.typeString('" . $story . "<hr>" . $energyRes . "').start();
+                        type$key.typeString('" . $story . "<hr>" . $energyRes . (!empty(isItemInCurrentSpot()) ? "<hr>" . isItemInCurrentSpot() : null) . "').start();
                     </script>";
 
 

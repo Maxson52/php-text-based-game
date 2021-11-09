@@ -100,7 +100,7 @@ function setScene()
     $scenes[7] = array(
         'location' => 'The Ocean',
         'commands' => array('w', 'west', 's', 'south', 'u', 'up', 'd', 'down'), // grab the key (should it require a take/grab or only a down/d?)
-        'story' => ($_SESSION['game_save']['items']['key']['pos'] == "(3,1,-1)") ? array('As you drift further from the boat, a glimmer of light catches your eye.', 'You see a small key on the ground, at least 15 feet below the surface.') : array('Out in the blue of the ocean, a key was once lying on the floor of the sea in this exact spot.'),
+        'story' => ($_SESSION['game_save']['items']['key']['pos'] == "(3,1,-1)") ? array('As you drift further from the boat, a glimmer of light catches your eye.', 'You see a small key on the ground, at least 15 feet below the surface.') : array('The whitecaps are beautiful, especially up so close.', 'Out in the blue of the ocean, a key was once lying on the floor of the sea in this exact spot.'),
         'story-down' => ($_SESSION['game_save']['items']['key']['pos'] == "(3,1,-1)") ? array('You dive down, as much air in your lungs as you can hold.', 'Your vision gets worse and your ears start to ring.', 'You see the glimmer of the key and jolt towards it.') : array('You dive down, as much air in your lungs as you can hold.', 'Your vision gets worse and your ears start to ring.', 'There is nothing down here anymore.')
     );
     $scenes[8] = array(
@@ -131,7 +131,7 @@ function setScene()
     $scenes[13] = array(
         'location' => $_SESSION['game_save']['isHilly'] ? 'Craggy Cliff' : '<strike>Craggy Cliff</strike> Vacant Valley',
         'commands' => array('n', 'e', 'w', 'north', 'east', 'west'), // use shovel to dig rocks
-        'story' => ($_SESSION['game_save']['isHilly']) ? array('A craggy cliff lies upon you.', 'It seems rocks and mounds of dirt block the path.', 'Stomping on the dirt reveals it is loosely compacted and could be dug out. The rocks can be hauled away.') : array('The path has opened up, but at what cost?', 'You have expended energy digging and hauling away the dirt and rocks.', 'Was it worth it?'),
+        'story' => ($_SESSION['game_save']['isHilly']) ? array('A craggy cliff lies upon you.', 'You find yourself in the middle of the cliffs.', 'It seems rocks and mounds of dirt block the path on all sides.', 'The rocks could likely be hauled away. Stomping on the dirt reveals it is loosely compacted and could be dug out.', 'Without a shovel, it is game over.') : array('The path has opened up, but at what cost?', 'You have expended energy digging and hauling away the dirt and rocks.', 'Was it worth it?'),
     );
     $scenes[14] = array(
         'location' => 'The Tunnel',
