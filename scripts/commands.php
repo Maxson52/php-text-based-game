@@ -91,13 +91,23 @@ function getXYZ()
 // motion function
 function moveAmount($direction)
 {
+    global $energyRes;
+
     // make sure user is on a valid location
     // the first part of the condition is the spots you can move to if you're up or down
     if ($_SESSION['game_save']['location'] != 2 && $_SESSION['game_save']['location'] != 3 && ($_SESSION['game_save']['vertLocation'] == -1 || $_SESSION['game_save']['vertLocation'] == 1)) return "You can't go that way, you aren't on level ground!";
 
+    // check if they are on the boat and disallow them from jumping off the boat
+    if (getXYZ() == "(2,0,1)" && ($direction != 'e' && $direction != 'east')) return "You can not go that way, you are on the deck of the boat!";
+    if (getXYZ() == "(3,0,1)" && ($direction != 'w' && $direction != 'west')) return "You can not go that way, you are on the deck of the boat!";
+
+
+    // if the user is in a certain location, such as the cliffs or next to the door, they can't move unless condition is met
     if ($_SESSION['game_save']['location'] == 13 && $_SESSION['game_save']['isHilly']) return "The landscape is too hilly to continue this way!";
     if ($_SESSION['game_save']['location'] == 14 && $_SESSION['game_save']['doorLocked']) return "The door is locked!";
     if ($_SESSION['game_save']['location'] == 11) energyLoss(rand(1, 3));
+
+    $energyRes = randomEnergyLoss();
 
     if ($direction == 'n' or $direction == 'north') {
         setLocation(-4);
@@ -115,6 +125,8 @@ function moveAmount($direction)
 // vertical motion
 function moveVertical($direction)
 {
+    global $energyRes;
+
     // if they want to go up
     if ($direction == 'u' or $direction == 'up') {
         // check if they are already at the top
@@ -122,6 +134,7 @@ function moveVertical($direction)
             // then make sure they either can go to z = 1 or they can't
             if (isset(getLocation()['story-up']) || getVertLocation() == -1) {
                 setVertLocation(1);
+                $energyRes = randomEnergyLoss();
             } else {
                 return "You can't go up here!";
             }
@@ -135,6 +148,7 @@ function moveVertical($direction)
             // then make sure they either can go to z = -1 or they can't
             if (isset(getLocation()['story-down']) || getVertLocation() == 1) {
                 setVertLocation(-1);
+                $energyRes = randomEnergyLoss();
             } else {
                 return "You can't go down here!";
             }
@@ -222,7 +236,8 @@ function showInventory($emoji)
     }
 
     if (empty($inventory)) {
-        return "You have nothing in your inventory!";
+        if ($emoji) return "You have nothing!";
+        else return "You have nothing in your inventory!";
     } else {
         if ($emoji) {
             $inventory = str_replace('key', '🔑', $inventory);
@@ -232,7 +247,7 @@ function showInventory($emoji)
 
             return "You have " . implode(", ", $inventory);
         } else {
-            return "You have a " . implode(", a ", $inventory);
+            return "You have a " . implode(" and a ", $inventory);
         }
     }
 }
@@ -247,7 +262,7 @@ function showHelp()
     // only show some of the commands
     foreach ($commands as $command => $value) {
         if ($command == 'north' || $command == 'south' || $command == 'east' || $command == 'west' || $command == 'up' || $command == 'down' || $command == 'go' || $command == 'take' || $command == 'drop' || $command == 'energy' || $command == 'inventory' || $command == 'gui' || $command == 'help' || $command == 'hint') {
-            $inventory .= "<u>" . $command . "</u> - <i>" . $value['description'] . "</i><br>";
+            $inventory .= "<b>" . $command . "</b> - <i>" . $value['description'] . "</i><br>";
         }
     }
 
@@ -288,7 +303,7 @@ function useItem($command)
                 }
                 // if the item is food
                 else if ($itemName == 'food') {
-                    energyLoss(rand(-3, -1));
+                    energyLoss(rand(-5, -2));
                     // remove food from inventory
                     $_SESSION['game_save']['items'][$itemName]['pos'] = '';
                     // return message
@@ -345,7 +360,8 @@ function energyLoss($loss)
 // randomize energy loss every move
 function randomEnergyLoss()
 {
-    $loss = rand(0, 1);
+    // odds of losing one energy is 33%
+    $loss = rand(1, 3) == 1 ? 1 : 0;
 
     return energyLoss($loss);
 }
@@ -374,6 +390,10 @@ function go($userCommands)
         foreach ($userCommands as $word) {
             if ($word == 'go') continue;
 
+            // check if the command is a direction
+            if (!isset($commands[$word])) continue;
+
+
             $valid = isCommandValid([$word, $commands[$word], $userCommands]);
 
             if (!isset($valid['error'])) {
@@ -401,4 +421,30 @@ function getHint()
     global $hints;
 
     return $hints[rand(0, count($hints) - 1)];
+}
+
+// is item in the current spot
+function isItemInCurrentSpot()
+{
+    $items = $_SESSION['game_save']['items'];
+    $spot = [];
+
+    $defaults = [
+        'volleyball' => '(0,2,0)',
+        'shovel' => '(0,0,0)',
+        'food' => '(3,0,1)',
+        'key' => '(3,1,-1)'
+    ];
+
+    foreach ($items as $item => $value) {
+        if ($value['pos'] == getXYZ() && $defaults[$item] != $value['pos']) {
+            $spot[] = $item;
+        }
+    }
+
+    if ($spot == [] || empty($spot)) {
+        return;
+    } else {
+        return "You dropped a " . implode(" and a ", $spot) . " here.";
+    }
 }
